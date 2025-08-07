@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  sonarr-autoimport:
+    image: ghcr.io/YOUR_USERNAME/sonarr-autoimport-go:latest
+    container_name: sonarr-autoimport-go
+    environment:
+      - TZ=Europe/Berlin
+      - SONARR_URL=http://sonarr:8989
+      - SONARR_API_KEY=your_api_key_here
+      - SCAN_INTERVAL=300
+      - DRY_RUN=false
+      - VERBOSE=true
+      - DAEMON_MODE=true
+    volumes:
+      - ./config:/config
+      - /path/to/imports:/media
+      - /path/to/downloads:/downloads
+    restart: unless-stopped
+    networks:
+      - sonarr_network
+
+networks:
+  sonarr_network:
+    external: true
