@@ -1,0 +1,189 @@
+{
+  "sonarr": {
+    "url": "${SONARR_URL}",
+    "apikey": "${SONARR_API_KEY}",
+    "downloadsFolder": "/downloads",
+    "qualityProfile": 1,
+    "languageProfile": 1,
+    "rootFolder": "/tv"
+  },
+  "parsing": {
+    "animePatterns": [
+      {
+        "comment": "Pattern for: Shangri-La_Frontier_2nd_Season_[09]_[AniLibria]_[WEBRip_1080p].mkv",
+        "pattern": "^(.+?)(?:_|\\s)+(?:(\\d+)(?:nd|rd|th)?(?:_|\\s)+Season)?(?:_|\\s)*\\[(\\d+)\\]",
+        "titleGroup": 1,
+        "seasonGroup": 2,
+        "episodeGroup": 3
+      },
+      {
+        "comment": "Pattern for: [Tenirt] Monogatari Series Off and Monster Season - 03 [1080p].mkv",
+        "pattern": "^\\[([^\\]]+)\\]\\s+(.+?)\\s+-\\s+(\\d+)\\s+\\[",
+        "titleGroup": 2,
+        "seasonGroup": 0,
+        "episodeGroup": 3
+      },
+      {
+        "comment": "Pattern for: [Yurasyk] FLCL - 01 [BDRip 1440x1080 x264 FLAC].mkv",
+        "pattern": "^\\[([^\\]]+)\\]\\s+(.+?)\\s+-\\s+(\\d{1,3})\\s+\\[",
+        "titleGroup": 2,
+        "seasonGroup": 0,
+        "episodeGroup": 3
+      },
+      {
+        "comment": "Pattern for: Sakamoto Days TV-1 Part 1 05.mkv",
+        "pattern": "^(.+?)\\s+(\\d{1,3})(?:\\.mkv|\\.mp4|\\.avi)?$",
+        "titleGroup": 1,
+        "seasonGroup": 0,
+        "episodeGroup": 2
+      },
+      {
+        "comment": "Pattern for: [Kawaiika-Raws] Yojouhan Shinwa Taikei 01 [BDRip 1920x1080 HEVC FLAC].mkv",
+        "pattern": "^\\[([^\\]]+)\\]\\s+(.+?)\\s+(\\d+)\\s+\\[",
+        "titleGroup": 2,
+        "seasonGroup": 0,
+        "episodeGroup": 3
+      },
+      {
+        "comment": "Pattern for: Ame_to_Kimi_to_[03].mkv",
+        "pattern": "^(.+?)(?:_|\\.)*\\[(\\d+)\\]",
+        "titleGroup": 1,
+        "seasonGroup": 0,
+        "episodeGroup": 2
+      },
+      {
+        "comment": "Pattern for: Kami.no.Tou.s02e03.HD1080p.WEBRip.Rus.AniDub.com.mkv",
+        "pattern": "^(.+?)(?:\\.|_)+[sS](\\d+)[eE](\\d+)",
+        "titleGroup": 1,
+        "seasonGroup": 2,
+        "episodeGroup": 3
+      },
+      {
+        "comment": "Generic Season Episode pattern: Show Name S01E05",
+        "pattern": "^(.+?)(?:_|\\s)+[sS](\\d+)[eE](\\d+)",
+        "titleGroup": 1,
+        "seasonGroup": 2,
+        "episodeGroup": 3
+      },
+      {
+        "comment": "Generic episode only pattern: Show Name 12",
+        "pattern": "^(.+?)(?:_|\\.\\s)+(\\d+)(?:\\s|\\.|_|$)",
+        "titleGroup": 1,
+        "seasonGroup": 0,
+        "episodeGroup": 2
+      },
+      {
+        "comment": "Season folder pattern: Show Name Season 2 [08]",
+        "pattern": "^(.+?)(?:_|\\s)+Season(?:_|\\s)+(\\d+)(?:_|\\s)*\\[(\\d+)\\]",
+        "titleGroup": 1,
+        "seasonGroup": 2,
+        "episodeGroup": 3
+      }
+    ],
+    "seasonPatterns": [
+      "(?:(\\d+)(?:nd|rd|th)?\\s+Season)",
+      "(?:Season\\s+(\\d+))",
+      "(?:[sS](\\d+))",
+      "(?:S(\\d+))"
+    ],
+    "episodePatterns": [
+      "\\[(\\d+)\\]",
+      "[eE](\\d+)",
+      "Episode\\s+(\\d+)",
+      "Ep\\s*(\\d+)",
+      "(?:^|\\s)(\\d{1,3})(?:\\s|\\.|$)"
+    ],
+    "qualityPatterns": [
+      "1080p",
+      "720p",
+      "480p",
+      "HD1080p",
+      "HD720p",
+      "WEBRip",
+      "BluRay",
+      "BDRip",
+      "DVDRip",
+      "HEVC",
+      "x264",
+      "x265"
+    ],
+    "groupPatterns": [
+      "\\[([^\\]]+)\\](?=.*\\.(mkv|mp4|avi)$)",
+      "^\\[([^\\]]+)\\]",
+      "\\(([^)]+)\\)$",
+      "([A-Za-z0-9\\-_]+)\\.com"
+    ]
+  },
+  "transforms": [
+    {
+      "comment": "Remove TV-X Part X indicators",
+      "search": "\\bTV-\\d+\\s+Part\\s+\\d+\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Convert underscores to spaces",
+      "search": "_",
+      "replace": " "
+    },
+    {
+      "comment": "Convert dots to spaces (but not in extensions)",
+      "search": "\\.",
+      "replace": " "
+    },
+    {
+      "comment": "Remove common quality/source tags",
+      "search": "\\b(?:HD)?(?:1080p|720p|480p)\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Remove codec information",
+      "search": "\\b(?:HEVC|x264|x265|H264|H265|h264)\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Remove audio information", 
+      "search": "\\b(?:FLAC|AAC|AC3|DTS)\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Remove source information",
+      "search": "\\b(?:WEBRip|BluRay|BDRip|BDRemux|DVDRip|BRRip)\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Remove language tags",
+      "search": "\\b(?:Rus|Eng|Jap|Japanese|English|Russian)\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Remove website names",
+      "search": "[A-Za-z0-9\\-_]+\\.com",
+      "replace": ""
+    },
+    {
+      "comment": "Remove resolution information",
+      "search": "\\b\\d{3,4}x\\d{3,4}\\b",
+      "replace": ""
+    },
+    {
+      "comment": "Remove redundant 'Season' from titles",
+      "search": "\\bSeason\\s*$",
+      "replace": ""
+    },
+    {
+      "comment": "Clean up 'Series Off and Monster Season' type titles",
+      "search": "\\bSeries\\s+Off\\s+and\\s+Monster\\s+Season\\b",
+      "replace": "Series"
+    },
+    {
+      "comment": "Collapse multiple spaces into single space",
+      "search": "\\s+",
+      "replace": " "
+    },
+    {
+      "comment": "Trim whitespace from beginning and end",
+      "search": "^\\s+|\\s+$",
+      "replace": ""
+    }
+  ]
+}
