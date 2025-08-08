@@ -18,8 +18,37 @@ services:
       - /path/to/downloads:/downloads
     restart: unless-stopped
     networks:
-      - sonarr_network
+      - media_network
+    # No ports exposed - this is a background service
+    depends_on:
+      - sonarr
+
+  # Example Sonarr service (if not already defined elsewhere)
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - ./sonarr-config:/config
+      - /path/to/tv:/tv
+      - /path/to/downloads:/downloads
+    restart: unless-stopped
+    networks:
+      - media_network
+      - caddy_network
+    # Sonarr needs to be accessible via Caddy
+    expose:
+      - "8989"
 
 networks:
-  sonarr_network:
-    external: true
+  # Internal network for media services communication
+  media_network:
+    driver: bridge
+    internal: false  # Allows internet access for API calls
+    
+  # Network shared with Caddy for reverse proxy
+  caddy_network:
+    external: true  # This should be created externally and shared with Caddy
